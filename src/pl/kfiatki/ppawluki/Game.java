@@ -6,31 +6,65 @@ import java.util.Date;
 public class Game {
 
 	private Date time;
-	private Date fpsMeasure;
-	private Integer accumulatedDelay = 0;
-	private Integer catchupLogic = 0;
+	private int fpsMeasure;
+	private Integer accumulatedDelay ;
+	private Integer catchupLogic;
 
-	private BigInteger dnaEarned = new BigInteger("0");// all cookies earned during gameplay
-	private BigInteger dna = new BigInteger("0");// cookies
-	private BigInteger dnaDisplay = new BigInteger("0");// cookies display
-	private BigInteger dnaPs = new BigInteger("0");// cookies per second (to recalculate with every new purchase)
-	private BigInteger dnaReset = new BigInteger("0");// cookies lost to resetting
-	private BigInteger ufoClicks = new BigInteger("0");// +1 for each click on the UFO (this game only)
-	private BigInteger supportClicks = new BigInteger("0");// +1 for each support UFO clicked (time)
-	private BigInteger supportClicksLocal = new BigInteger("0");// +1 for each support UFOclicked (this game only)
-	private BigInteger missedSupportClicks = new BigInteger("0");// +1 for eachsupportUFOmissed
-	private BigInteger handmadeDna = new BigInteger("0");// all the dna takenfrom clicking the UFO
-	private BigInteger greyCells = new BigInteger("0");// multiplier, saves after reset
-	private BigInteger resets = new BigInteger("0");// reset counter
-	private String bg = new String("");// background (grandmas and such)
-	private boolean bgFade = false;// fading to background
-	private BigInteger bgR = new BigInteger("0");// ratio (0 - not faded, 1 - fully faded)
-	private BigInteger bgRd = new BigInteger("0");// ratio displayed
+	private BigInteger dnaEarned;// all dna earned during gameplay
+	private BigInteger dnaOverall;
+	private BigInteger dna;// dna
+	private StringBuilder dnaDisplayString; // dna displayed as "1.2e34" etc
+	private BigInteger dnaPs;// dna per second (to recalculate with every new purchase)
+	private BigInteger dnaReset;// dna lost to resetting
+	private BigInteger ufoClicks;// +1 for each click on the UFO (this game only)
+	private BigInteger supportClicks;// +1 for each support UFO clicked (time)
+	private BigInteger supportClicksLocal;// +1 for each support UFOclicked (this game only)
+	private BigInteger missedSupportClicks;// +1 for eachsupportUFOmissed
+	private BigInteger handmadeDna;// all the dna takenfrom clicking the UFO
+	private BigInteger greyCells;// multiplier, saves after reset
+	private BigInteger resets;// reset counter
+	private String bg;// background (grandmas and such)
+	private boolean bgFade;// fading to background
+	private BigInteger bgR;// ratio (0 - not faded, 1 - fully faded)
+	private BigInteger bgRd;// ratio displayed
 	private Date startDate;
 	private Date fullDate;
 	private Date lastDate; // last save date
 	private Integer level;
+	
+	private Upgrade upgrades[];
+	
+	
+	public Game() {
+		super();
+		this.time = new Date();
+		this.startDate = new Date();
+		this.fullDate = new Date();
+		this.lastDate = new Date();
+		this.fpsMeasure = 30;
+//		this.accumulatedDelay = accumulatedDelay;
+//		this.catchupLogic = catchupLogic;
+		this.dnaEarned = new BigInteger("0");
+		this.dnaOverall = new BigInteger("0");
+		this.dna = new BigInteger("0");
+		this.dnaDisplayString = new StringBuilder("0");
+		this.dnaPs = new BigInteger("0");
+		this.dnaReset = new BigInteger("0");
+		this.ufoClicks = new BigInteger("0");
+		this.supportClicks = new BigInteger("0");
+		this.supportClicksLocal = new BigInteger("0");
+		this.missedSupportClicks = new BigInteger("0");
+		this.handmadeDna = new BigInteger("0");
+		this.greyCells = new BigInteger("0");
+		this.resets = new BigInteger("0");
+		this.bg = new String("0");
+		this.bgFade = false;
+		this.bgR = new BigInteger("0");
+		this.bgRd = new BigInteger("0");
+		this.level = 1;		
+	}
 
+	
 	class Upgrade {
 		private BigInteger price;
 		private BigInteger cost;
@@ -42,51 +76,6 @@ public class Game {
 		public BigInteger getPrice() {
 			return price;
 		}
-
-		public void setPrice(BigInteger price) {
-			this.price = price;
-		}
-
-		public BigInteger getCost() {
-			return cost;
-		}
-
-		public void setCost(BigInteger cost) {
-			this.cost = cost;
-		}
-
-		public BigInteger getDamage() {
-			return damage;
-		}
-
-		public void setDamage(BigInteger damage) {
-			this.damage = damage;
-		}
-
-		public BigInteger getDamagePs() {
-			return damagePs;
-		}
-
-		public void setDamagePs(BigInteger damage, Integer count) {
-			this.damagePs = damage.multiply(BigInteger.valueOf(count.intValue()));
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public Integer getCount() {
-			return count;
-		}
-
-		public void setCount(Integer count) {
-			this.count = count;
-		}
-
 	}
 
 	class Monster {
@@ -130,6 +119,12 @@ public class Game {
 
 	}
 
+	public void formatDna(){
+		if(this.dna.compareTo(BigInteger.valueOf(99999L)) == -1) return;
+		StringBuilder number = new StringBuilder(this.dna.toString());
+		dnaDisplayString = new StringBuilder(number.charAt(0)+"."+number.subSequence(1,3)+"e"+number.length());
+	}
+	
 	public Date getTime() {
 		return time;
 	}
@@ -138,11 +133,11 @@ public class Game {
 		this.time = time;
 	}
 
-	public Date getFpsMeasure() {
+	public int getFpsMeasure() {
 		return fpsMeasure;
 	}
 
-	public void setFpsMeasure(Date fpsMeasure) {
+	public void setFpsMeasure(int fpsMeasure) {
 		this.fpsMeasure = fpsMeasure;
 	}
 
@@ -178,12 +173,12 @@ public class Game {
 		this.dna = dna;
 	}
 
-	public BigInteger getDnaDisplay() {
-		return dnaDisplay;
+	public StringBuilder getDnaDisplay() {
+		return dnaDisplayString;
 	}
 
-	public void setDnaDisplay(BigInteger dnaDisplay) {
-		this.dnaDisplay = dnaDisplay;
+	public void setDnaDisplay(StringBuilder dnaDisplay) {
+		this.dnaDisplayString = dnaDisplay;
 	}
 
 	public BigInteger getDnaPs() {
@@ -322,12 +317,36 @@ public class Game {
 		this.level = level;
 	}
 
+	public BigInteger getDnaOverall() {
+		return dnaOverall;
+	}
+
+	public void setDnaOverall(BigInteger dnaOverall) {
+		this.dnaOverall = dnaOverall;
+	}
+
+	public StringBuilder getDnaDisplayString() {
+		return dnaDisplayString;
+	}
+
+	public void setDnaDisplayString(StringBuilder dnaDisplayString) {
+		this.dnaDisplayString = dnaDisplayString;
+	}
+
+	public Upgrade[] getUpgrades() {
+		return upgrades;
+	}
+
+	public void setUpgrades(Upgrade[] upgrades) {
+		this.upgrades = upgrades;
+	}
+
 	// private BigInteger frenzy=0;//as long as >0, cookie production is
 	// multiplied by frenzyPower
 	// private Integer frenzyMax=0;//how high was our initial burst
 	// private Integer frenzyPower=1;
 	// private Integer clickFrenzy=0;//as long as >0, mouse clicks get 777x more
-	// cookies
+	// dna
 	// private Integer clickFrenzyMax=0;//how high was our initial burst
 	// private Integer milkProgress=0;//you gain a little bit for each achievement.
 	// Each increment of 1 is a different milk displayed.
@@ -343,7 +362,7 @@ public class Game {
 	// private Integer pledgeT=0;
 	// private Integer researchT=0;
 	// private Integer nextResearch=0;
-	// private Integer cookiesSucked=0;//cookies sucked by wrinklers
+	// private Integer dnaSucked=0;//dna sucked by wrinklers
 	// private Integer cpsSucked=0;//percent of CpS being sucked by wrinklers
 	// private Integer wrinklersPopped=0;
 	// private Integer santaLevel=0;
