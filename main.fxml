@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="607.0" prefWidth="996.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Canvas height="537.0" onMouseClicked="private void bindToTime() {  Timeline timeline = new Timeline(    new KeyFrame(Duration.seconds(0),      new EventHandler&lt;ActionEvent&gt;() {        @Override public void handle(ActionEvent actionEvent) {          Calendar time = Calendar.getInstance();          SimpleDateFormat simpleDateFormat = new SimpleDateFormat(&quot;HH:mm:ss&quot;);          setText(simpleDateFormat.format(time.getTime()));        }      }    ),    new KeyFrame(Duration.seconds(1))  );  timeline.setCycleCount(Animation.INDEFINITE);  timeline.play(); }}" width="696.0" />
+      <VBox prefHeight="581.0" prefWidth="272.0">
+         <children>
+            <Pane prefHeight="71.0" prefWidth="272.0">
+               <children>
+                  <Text layoutX="1.0" layoutY="27.0" onMouseClicked="private void bindToTime() {  Timeline timeline = new Timeline(    new KeyFrame(Duration.seconds(0),      new EventHandler&lt;ActionEvent&gt;() {        @Override public void handle(ActionEvent actionEvent) {          Calendar time = Calendar.getInstance();          SimpleDateFormat simpleDateFormat = new SimpleDateFormat(&quot;HH:mm:ss&quot;);          setText(simpleDateFormat.format(time.getTime()));        }      }    ),    new KeyFrame(Duration.seconds(1))  );  timeline.setCycleCount(Animation.INDEFINITE);  timeline.play(); }}" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="270.13671875" />
+               </children>
+            </Pane>
+            <TabPane nodeOrientation="LEFT_TO_RIGHT" prefHeight="513.0" prefWidth="263.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Untitled Tab 1">
+                     <content>
+                        <ScrollPane prefHeight="561.0" prefWidth="178.0">
+                           <content>
+                              <VBox prefHeight="559.0" prefWidth="271.0">
+                                 <children>
+                                    <Button fx:id="upgrade1" mnemonicParsing="false" onKeyPressed="#keyPressed" onKeyReleased="#keyReleased" prefHeight="76.0" prefWidth="277.0" text="1" />
+                                    <Button fx:id="upgrade11" mnemonicParsing="false" onKeyPressed="#keyPressed" onKeyReleased="#keyReleased" onMouseClicked="#click" prefHeight="76.0" prefWidth="277.0" text="2" />
+                                    <Button fx:id="upgrade12" mnemonicParsing="false" onKeyPressed="#keyPressed" onKeyReleased="#keyReleased" onMouseClicked="#click" prefHeight="76.0" prefWidth="277.0" text="3" />
+                                    <Button fx:id="upgrade13" mnemonicParsing="false" onKeyPressed="#keyPressed" onKeyReleased="#keyReleased" onMouseClicked="#click" prefHeight="76.0" prefWidth="277.0" text="4" />
+                                    <Button fx:id="upgrade14" mnemonicParsing="false" onKeyPressed="#keyPressed" onKeyReleased="#keyReleased" onMouseClicked="#click" prefHeight="76.0" prefWidth="277.0" text="5" />
+                                    <Button fx:id="upgrade15" mnemonicParsing="false" onKeyPressed="#keyPressed" onKeyReleased="#keyReleased" onMouseClicked="#click" prefHeight="76.0" prefWidth="277.0" text="6" />
+                                    <Button fx:id="upgrade17" mnemonicParsing="false" onKeyPressed="#keyPressed" onKeyReleased="#keyReleased" onMouseClicked="#click" prefHeight="76.0" prefWidth="277.0" text="7" />
+                                    <Button fx:id="upgrade18" mnemonicParsing="false" onKeyPressed="#keyPressed" onKeyReleased="#keyReleased" onMouseClicked="#click" prefHeight="76.0" prefWidth="277.0" text="8" />
+                                 </children>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                     </content>
+                </Tab>
+                <Tab text="Untitled Tab 2">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="371.0" prefWidth="219.0">
+                           <children>
+                              <Text layoutX="22.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Statistics" wrappingWidth="219.13671875" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+         <HBox.margin>
+            <Insets bottom="30.0" right="30.0" top="30.0" />
+         </HBox.margin>
+      </VBox>
+   </children>
+</HBox>

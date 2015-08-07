@@ -7,8 +7,8 @@ public class Game {
 
 	private Date time;
 	private Date fpsMeasure;
-	private int accumulatedDelay = 0;
-	private int catchupLogic = 0;
+	private Integer accumulatedDelay = 0;
+	private Integer catchupLogic = 0;
 
 	private BigInteger dnaEarned = new BigInteger("0");// all cookies earned during gameplay
 	private BigInteger dna = new BigInteger("0");// cookies
@@ -29,7 +29,7 @@ public class Game {
 	private Date startDate;
 	private Date fullDate;
 	private Date lastDate; // last save date
-	private int level;
+	private Integer level;
 
 	class Upgrade {
 		private BigInteger price;
@@ -37,7 +37,7 @@ public class Game {
 		private BigInteger damage;
 		private BigInteger damagePs;
 		private String name;
-		private int count;
+		private Integer count;
 
 		public BigInteger getPrice() {
 			return price;
@@ -67,8 +67,8 @@ public class Game {
 			return damagePs;
 		}
 
-		public void setDamagePs(BigInteger damage, int count) {
-			this.damagePs = damage.multiply(BigInteger(String()));
+		public void setDamagePs(BigInteger damage, Integer count) {
+			this.damagePs = damage.multiply(BigInteger.valueOf(count.intValue()));
 		}
 
 		public String getName() {
@@ -79,11 +79,11 @@ public class Game {
 			this.name = name;
 		}
 
-		public int getCount() {
+		public Integer getCount() {
 			return count;
 		}
 
-		public void setCount(int count) {
+		public void setCount(Integer count) {
 			this.count = count;
 		}
 
@@ -93,7 +93,8 @@ public class Game {
 		private BigInteger progress;
 		private BigInteger gold;
 		private String name;
-		// private int levelInterval; << zrobiæ z tego 2D listê monsterów i na ka¿dym poziomie monstery, ktore moga sie pojawic
+		private boolean isBoss = false;
+		// private Integer levelInterval; << zrobiæ z tego 2D listê monsterów i na ka¿dym poziomie monstery, ktore moga sie pojawic
 		
 		public BigInteger getProgress() {
 			return progress;
@@ -119,6 +120,14 @@ public class Game {
 			this.name = name;
 		}
 
+		public boolean isBoss() {
+			return isBoss;
+		}
+
+		public void setBoss(boolean isBoss) {
+			this.isBoss = isBoss;
+		}
+
 	}
 
 	public Date getTime() {
@@ -137,19 +146,19 @@ public class Game {
 		this.fpsMeasure = fpsMeasure;
 	}
 
-	public int getAccumulatedDelay() {
+	public Integer getAccumulatedDelay() {
 		return accumulatedDelay;
 	}
 
-	public void setAccumulatedDelay(int accumulatedDelay) {
+	public void setAccumulatedDelay(Integer accumulatedDelay) {
 		this.accumulatedDelay = accumulatedDelay;
 	}
 
-	public int getCatchupLogic() {
+	public Integer getCatchupLogic() {
 		return catchupLogic;
 	}
 
-	public void setCatchupLogic(int catchupLogic) {
+	public void setCatchupLogic(Integer catchupLogic) {
 		this.catchupLogic = catchupLogic;
 	}
 
@@ -305,41 +314,41 @@ public class Game {
 		this.lastDate = lastDate;
 	}
 
-	public int getLevel() {
+	public Integer getLevel() {
 		return level;
 	}
 
-	public void setLevel(int level) {
+	public void setLevel(Integer level) {
 		this.level = level;
 	}
 
 	// private BigInteger frenzy=0;//as long as >0, cookie production is
 	// multiplied by frenzyPower
-	// private int frenzyMax=0;//how high was our initial burst
-	// private int frenzyPower=1;
-	// private int clickFrenzy=0;//as long as >0, mouse clicks get 777x more
+	// private Integer frenzyMax=0;//how high was our initial burst
+	// private Integer frenzyPower=1;
+	// private Integer clickFrenzy=0;//as long as >0, mouse clicks get 777x more
 	// cookies
-	// private int clickFrenzyMax=0;//how high was our initial burst
-	// private int milkProgress=0;//you gain a little bit for each achievement.
+	// private Integer clickFrenzyMax=0;//how high was our initial burst
+	// private Integer milkProgress=0;//you gain a little bit for each achievement.
 	// Each increment of 1 is a different milk displayed.
-	// private int milkH = milkProgress/2;//milk height, between 0 and 1
+	// private Integer milkH = milkProgress/2;//milk height, between 0 and 1
 	// (although should never go above 0.5)
-	// private int milkHd=0;//milk height display
-	// private int milkType=-1;//custom milk : 0=plain, 1=chocolate...
-	// private int backgroundType=-1;//custom background : 0=blue, 1=red...
-	// private int elderWrath=0;
-	// private int elderWrathOld=0;
-	// private int elderWrathD=0;
-	// private int pledges=0;
-	// private int pledgeT=0;
-	// private int researchT=0;
-	// private int nextResearch=0;
-	// private int cookiesSucked=0;//cookies sucked by wrinklers
-	// private int cpsSucked=0;//percent of CpS being sucked by wrinklers
-	// private int wrinklersPopped=0;
-	// private int santaLevel=0;
-	// private int reindeerClicked=0;
-	// private int seasonT=0;
-	// private int seasonUses=0;
+	// private Integer milkHd=0;//milk height display
+	// private Integer milkType=-1;//custom milk : 0=plain, 1=chocolate...
+	// private Integer backgroundType=-1;//custom background : 0=blue, 1=red...
+	// private Integer elderWrath=0;
+	// private Integer elderWrathOld=0;
+	// private Integer elderWrathD=0;
+	// private Integer pledges=0;
+	// private Integer pledgeT=0;
+	// private Integer researchT=0;
+	// private Integer nextResearch=0;
+	// private Integer cookiesSucked=0;//cookies sucked by wrinklers
+	// private Integer cpsSucked=0;//percent of CpS being sucked by wrinklers
+	// private Integer wrinklersPopped=0;
+	// private Integer santaLevel=0;
+	// private Integer reindeerClicked=0;
+	// private Integer seasonT=0;
+	// private Integer seasonUses=0;
 
 }
