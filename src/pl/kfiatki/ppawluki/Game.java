@@ -1,6 +1,8 @@
 package pl.kfiatki.ppawluki;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 import java.util.Date;
 
 public class Game {
@@ -33,6 +35,8 @@ public class Game {
 	private Integer level;
 	
 	private Upgrade upgrades[];
+	private Monster monster;
+	
 	
 	
 	public Game() {
@@ -77,14 +81,58 @@ public class Game {
 			return price;
 		}
 	}
-
+///END OF UPGRADE SECTION
 	class Monster {
 		private BigInteger progress;
 		private BigInteger gold;
 		private String name;
 		private boolean isBoss = false;
 		// private Integer levelInterval; << zrobiæ z tego 2D listê monsterów i na ka¿dym poziomie monstery, ktore moga sie pojawic
+
+		public Monster(Integer level){
+			this.progress = calculateProgress(level);
+			this.gold = calculateGold(level);
+			this.name = giveName(level);
+			if(level%5 == 0)isBoss = true;
+		}
 		
+		@SuppressWarnings("static-access")
+		private BigInteger calculateProgress(Integer level){
+//			10*(1.6^(min(Level,140)-1)+min(Level,140)-1)*(1.15^max(Level-140,0))
+			
+			Integer min = Math.min(level, 140);
+									
+			BigDecimal bd = new BigDecimal("1.6");
+			bd = bd.pow(min-1);
+			BigDecimal bd2 = new BigDecimal("1.15");
+			bd2 = bd2.pow(Math.max(level-140, 0));
+
+			bd = bd.add(new BigDecimal(min-1));
+			bd = bd.multiply(BigDecimal.TEN);
+			bd = bd.multiply(bd2);
+			if(isBoss) bd.multiply(BigDecimal.TEN);
+			
+			MathContext mc = new MathContext(1);
+			bd.round(mc);
+			BigInteger progress = bd.toBigInteger();
+			
+			return progress;
+		}
+		
+		private BigInteger calculateGold(Integer level){
+//			Monster.progress/15*min(3,1.025^max(0,Level-75))
+			double multiplier = Math.min(3.0, Math.pow(1.025, Math.max(0, level-75)));
+			multiplier *=15;
+			long temp = (long) Math.ceil(multiplier);
+			return this.progress.divide(BigInteger.valueOf(temp));
+		}
+		
+		private String giveName(Integer level)
+		{
+			return "test";
+		}
+		
+	//setters-getters
 		public BigInteger getProgress() {
 			return progress;
 		}
@@ -116,15 +164,26 @@ public class Game {
 		public void setBoss(boolean isBoss) {
 			this.isBoss = isBoss;
 		}
-
 	}
-
+/// End of MONSTER SECTION
 	public void formatDna(){
 		if(this.dna.compareTo(BigInteger.valueOf(99999L)) == -1) return;
 		StringBuilder number = new StringBuilder(this.dna.toString());
-		dnaDisplayString = new StringBuilder(number.charAt(0)+"."+number.subSequence(1,3)+"e"+number.length());
+		dnaDisplayString = new StringBuilder(number.charAt(0)+"."+number.subSequence(1,3)+"e"+(number.length()-1));
 	}
 	
+	public String formatString(BigInteger bigInt){
+		if(bigInt.compareTo(BigInteger.valueOf(99999L)) == -1) return bigInt.toString();
+		StringBuilder number = new StringBuilder(bigInt.toString());
+		StringBuilder formatBuilder = new StringBuilder(number.charAt(0)+"."+number.subSequence(1,3)+"e"+(number.length()-1));
+		return formatBuilder.toString();
+	}
+
+	public void fetchMonster(Monster monster){
+		
+	}
+	
+/// Stupid setters-getters block
 	public Date getTime() {
 		return time;
 	}
@@ -219,6 +278,15 @@ public class Game {
 
 	public void setSupportClicksLocal(BigInteger supportClicksLocal) {
 		this.supportClicksLocal = supportClicksLocal;
+	}
+
+	public Monster spawnMonster() {
+		this.monster = new Monster(level);
+		return monster;
+	}
+
+	public void setMonster(Monster monster) {
+		this.monster = monster;
 	}
 
 	public BigInteger getMissedSupportClicks() {
@@ -340,7 +408,8 @@ public class Game {
 	public void setUpgrades(Upgrade[] upgrades) {
 		this.upgrades = upgrades;
 	}
-
+/// End of stupid setters-getters block	
+	
 	// private BigInteger frenzy=0;//as long as >0, cookie production is
 	// multiplied by frenzyPower
 	// private Integer frenzyMax=0;//how high was our initial burst

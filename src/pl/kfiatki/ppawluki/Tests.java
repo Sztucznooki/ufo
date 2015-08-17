@@ -5,6 +5,8 @@ package pl.kfiatki.ppawluki;
 
 import static org.junit.Assert.fail;
 
+import junit.framework.Assert;
+
 /**
  * @author ppawluki
  *
@@ -41,7 +43,23 @@ public class Tests {
 	
 	@org.junit.Test
 	public void addMonster() {
-		fail("Not yet implemented");
+		Game g = new Game();
+		System.out.println("First monster\n");
+		g.setLevel(22);
+		Game.Monster m = g.spawnMonster();
+		System.out.println("Progress: "+m.getProgress()+
+							"\nGold: "+m.getGold().toString()+
+							"\nname: "+m.getName());
+		System.out.println("Progress: "+g.formatString(m.getProgress())+
+				"\nGold: "+g.formatString(m.getGold())+
+				"\nname: "+m.getName());
+
+		System.out.println("\nSecond monster\n");
+		g.setLevel(222);
+		m = g.spawnMonster();
+		System.out.println("Progress: "+g.formatString(m.getProgress())+
+							"\nGold: "+g.formatString(m.getGold())+
+							"\nname: "+m.getName());
 	}
 	
 	@org.junit.Test
