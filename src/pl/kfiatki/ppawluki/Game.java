@@ -17,6 +17,7 @@ public class Game {
 	private BigInteger dna;// dna
 	private StringBuilder dnaDisplayString; // dna displayed as "1.2e34" etc
 	private BigInteger dnaPs;// dna per second (to recalculate with every new purchase)
+	private BigInteger dnaPc; // dna per click
 	private BigInteger dnaReset;// dna lost to resetting
 	private BigInteger ufoClicks;// +1 for each click on the UFO (this game only)
 	private BigInteger supportClicks;// +1 for each support UFO clicked (time)
@@ -84,6 +85,7 @@ public class Game {
 ///END OF UPGRADE SECTION
 	class Monster {
 		private BigInteger progress;
+		private BigInteger currentProgress;
 		private BigInteger gold;
 		private String name;
 		private boolean isBoss = false;
@@ -91,6 +93,7 @@ public class Game {
 
 		public Monster(Integer level){
 			this.progress = calculateProgress(level);
+			this.currentProgress = this.progress;
 			this.gold = calculateGold(level);
 			this.name = giveName(level);
 			if(level%5 == 0)isBoss = true;
@@ -132,13 +135,29 @@ public class Game {
 			return "test";
 		}
 		
-	//setters-getters
+		
+		
+	@Override
+		public String toString() {
+			return "Monster [progress=" + progress + ", currentProgress=" + currentProgress + ", gold=" + gold
+					+ ", name=" + name + ", isBoss=" + isBoss + "]";
+		}
+
+		//setters-getters
 		public BigInteger getProgress() {
 			return progress;
 		}
 
 		public void setProgress(BigInteger progress) {
 			this.progress = progress;
+		}
+
+		public BigInteger getCurrentProgress() {
+			return currentProgress;
+		}
+
+		public void setCurrentProgress(BigInteger currentProgress) {
+			this.currentProgress = currentProgress;
 		}
 
 		public BigInteger getGold() {
@@ -179,8 +198,21 @@ public class Game {
 		return formatBuilder.toString();
 	}
 
-	public void fetchMonster(Monster monster){
-		
+	public void scanMonster() {
+		monster.currentProgress = monster.currentProgress.subtract(dnaPs);
+		if(monster.currentProgress.compareTo(BigInteger.ZERO)==-1){
+			monster.currentProgress = BigInteger.ZERO;
+			dna = dna.add(monster.gold);
+			dnaEarned = dnaEarned.add(monster.gold);
+			dnaOverall = dnaOverall.add(monster.gold);
+		}
+		else{
+			BigInteger income = monster.gold.multiply(dnaPs);
+			income = income.divide(monster.progress);
+			dna = dna.add(income);
+			dnaEarned = dnaEarned.add(income);
+			dnaOverall = dnaOverall.add(income);
+		}
 	}
 	
 /// Stupid setters-getters block
@@ -246,6 +278,14 @@ public class Game {
 
 	public void setDnaPs(BigInteger dnaPs) {
 		this.dnaPs = dnaPs;
+	}
+
+	public BigInteger getDnaPc() {
+		return dnaPc;
+	}
+
+	public void setDnaPc(BigInteger dnaPc) {
+		this.dnaPc = dnaPc;
 	}
 
 	public BigInteger getDnaReset() {
@@ -409,6 +449,8 @@ public class Game {
 		this.upgrades = upgrades;
 	}
 /// End of stupid setters-getters block	
+
+
 	
 	// private BigInteger frenzy=0;//as long as >0, cookie production is
 	// multiplied by frenzyPower

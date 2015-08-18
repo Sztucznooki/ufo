@@ -5,7 +5,7 @@ package pl.kfiatki.ppawluki;
 
 import static org.junit.Assert.fail;
 
-import junit.framework.Assert;
+import java.math.BigInteger;
 
 /**
  * @author ppawluki
@@ -69,7 +69,14 @@ public class Tests {
 	
 	@org.junit.Test
 	public void spawnBoss(){
-		fail("Not yet implemented");
+		Game g = new Game();
+		g.setLevel(25);
+		Game.Monster m = g.spawnMonster();
+		if(!m.isBoss()) fail("Nie jest bossem");
+		g.setLevel(222);
+		m = g.spawnMonster();
+		if(m.isBoss()) fail("Jest bossem a nie powinien");
+
 	}
 		
 	/*Should:
@@ -78,8 +85,18 @@ public class Tests {
 	- increase dnaOverall;		- recalculate stage;
 	 */
 	@org.junit.Test
-	public void killMonster(){
-		fail("Not yet implemented");
+	public void scanMonster(){
+		Game g = new Game();
+		g.setLevel(25);
+		
+		g.setDnaPs(BigInteger.valueOf(100000000));
+		Game.Monster m = g.spawnMonster();
+		g.scanMonster();
+		System.out.println(m.toString()+"\nZ kolei dna = "+g.getDna().toString());
+		
+		g.setDnaPs(BigInteger.valueOf(710));
+		m = g.spawnMonster();
+		g.scanMonster();
 	}
 	
 	/*Should:
