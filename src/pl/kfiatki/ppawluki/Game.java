@@ -3,6 +3,7 @@ package pl.kfiatki.ppawluki;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Game {
@@ -23,10 +24,10 @@ public class Game {
 	private BigInteger supportClicks;// +1 for each support UFO clicked (time)
 	private BigInteger supportClicksLocal;// +1 for each support UFOclicked (this game only)
 	private BigInteger missedSupportClicks;// +1 for eachsupportUFOmissed
-	private BigInteger handmadeDna;// all the dna takenfrom clicking the UFO
+	private BigInteger handmadeDna;// all the dna taken from clicking the UFO
 	private BigInteger greyCells;// multiplier, saves after reset
 	private BigInteger resets;// reset counter
-	private String bg;// background (grandmas and such)
+	private String bg;// background
 	private boolean bgFade;// fading to background
 	private BigInteger bgR;// ratio (0 - not faded, 1 - fully faded)
 	private BigInteger bgRd;// ratio displayed
@@ -35,7 +36,7 @@ public class Game {
 	private Date lastDate; // last save date
 	private Integer level;
 	
-	private Upgrade upgrades[];
+	private ArrayList<Upgrade> upgrades = new ArrayList<Upgrade>();
 	private Monster monster;
 	
 	
@@ -66,22 +67,12 @@ public class Game {
 		this.bgFade = false;
 		this.bgR = new BigInteger("0");
 		this.bgRd = new BigInteger("0");
-		this.level = 1;		
-	}
-
-	
-	class Upgrade {
-		private BigInteger price;
-		private BigInteger cost;
-		private BigInteger damage;
-		private BigInteger damagePs;
-		private String name;
-		private Integer count;
-
-		public BigInteger getPrice() {
-			return price;
+		this.level = 1;	
+		for(int i = 0; i< EnumUpgrades.values().length; i++){
+			upgrades.add(new Upgrade(EnumUpgrades.values()[i]));
 		}
 	}
+	
 ///END OF UPGRADE SECTION
 	class Monster {
 		private BigInteger progress;
@@ -99,7 +90,6 @@ public class Game {
 			if(level%5 == 0)isBoss = true;
 		}
 		
-		@SuppressWarnings("static-access")
 		private BigInteger calculateProgress(Integer level){
 //			10*(1.6^(min(Level,140)-1)+min(Level,140)-1)*(1.15^max(Level-140,0))
 			
@@ -123,7 +113,7 @@ public class Game {
 		}
 		
 		private BigInteger calculateGold(Integer level){
-//			Monster.progress/15*min(3,1.025^max(0,Level-75))
+//			Monster.progress/(15*min(3,1.025^max(0,Level-75)))
 			double multiplier = Math.min(3.0, Math.pow(1.025, Math.max(0, level-75)));
 			multiplier *=15;
 			long temp = (long) Math.ceil(multiplier);
@@ -185,6 +175,7 @@ public class Game {
 		}
 	}
 /// End of MONSTER SECTION
+	
 	public void formatDna(){
 		if(this.dna.compareTo(BigInteger.valueOf(99999L)) == -1) return;
 		StringBuilder number = new StringBuilder(this.dna.toString());
@@ -198,6 +189,32 @@ public class Game {
 		return formatBuilder.toString();
 	}
 
+	public void buyUpgrade(EnumUpgrades upgrade){
+//		later add If.. 1 or 25 or 100
+		Upgrade upgr = upgrades.get(upgrade.ordinal()); 
+		if(dna.compareTo(upgr.getCost())<0){
+			System.out.println("Cannot upgrade, don't have sufficient dna");
+			return;
+		}
+		dna.subtract(upgr.getCost());
+		
+		upgrades.get(upgrade.ordinal()).buyOne();
+				if(upgr.getName().equals(EnumUpgrades.FIRST.getName())){
+			dnaPc = upgr.getDamagePs();
+		}
+		else{
+			recalculateDps();
+		}
+	}
+	
+	public void recalculateDps(){
+		BigInteger dps = new BigInteger("0");
+		for(Upgrade n: upgrades){
+			if(n.getName().equals(EnumUpgrades.FIRST.getName())) continue;
+			dps.add(n.getDamagePs());
+		}
+	}
+	
 	public void scanMonster() {
 		monster.currentProgress = monster.currentProgress.subtract(dnaPs);
 		if(monster.currentProgress.compareTo(BigInteger.ZERO)==-1){
@@ -441,13 +458,13 @@ public class Game {
 		this.dnaDisplayString = dnaDisplayString;
 	}
 
-	public Upgrade[] getUpgrades() {
-		return upgrades;
-	}
-
-	public void setUpgrades(Upgrade[] upgrades) {
-		this.upgrades = upgrades;
-	}
+//	public Upgrade[] getUpgrades() {
+//		return upgrades;
+//	}
+//
+//	public void setUpgrades(Upgrade[] upgrades) {
+//		this.upgrades = upgrades;
+//	}
 /// End of stupid setters-getters block	
 
 

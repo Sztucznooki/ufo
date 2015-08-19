@@ -4,7 +4,6 @@
 package pl.kfiatki.ppawluki;
 
 import static org.junit.Assert.fail;
-
 import java.math.BigInteger;
 
 /**
@@ -17,12 +16,6 @@ public class Tests {
  *============== Upgrades section  ===============
  *================================================*/
 	
-	
-	@org.junit.Test
-	public void addUpgrades() {
-		fail("Not yet implemented");
-	}
-	
 	@org.junit.Test
 	public void deleteUpgrades(){
 		fail("Not yet implemented");
@@ -34,7 +27,10 @@ public class Tests {
 	 */
 	@org.junit.Test
 	public void buyUpgrades() {
-		fail("Not yet implemented");
+		Game g = new Game();
+		g.setDna(BigInteger.valueOf(1000000));
+		g.buyUpgrade(EnumUpgrades.EIGHT);
+		g.buyUpgrade(EnumUpgrades.FIRST);
 	}
 	
 /*================================================
